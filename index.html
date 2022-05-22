@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<!--
+ @license
+ Copyright 2019 Google LLC. All Rights Reserved.
+ SPDX-License-Identifier: Apache-2.0
+-->
+<html>
+  <head>
+    <title>HotSpot Viewer</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <link
+      rel="stylesheet"
+      href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css"
+    />
+    <link rel="stylesheet" href="/resources/demos/style.css" />
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"
+    ></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+    />
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="/resources/demos/style.css" />
+
+    <link rel="stylesheet" type="text/css" href="./style.css" />
+    <script type="module" src="./index.ts"></script>
+    <script
+      defer
+      src="https://use.fontawesome.com/releases/v5.15.4/js/all.js"
+      integrity="sha384-rOA1PnstxnOBLzCLMcre8ybwbTmemjzdNlILg8O7z1lUkLXozs4DHonlDtnE7fpc"
+      crossorigin="anonymous"
+    ></script>
+    <!-- popup code start -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
+      rel="stylesheet"
+    />
+    <!--Stylesheets-->
+    <style media="screen">
+      *,
+      *:before,
+      *:after {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background-color: #0855ae;
+      }
+      .popup {
+        background-color: #ffffff;
+        width: 420px;
+        padding: 30px 40px;
+        position: absolute;
+        transform: translate(-50%, -50%);
+        left: 50%;
+        top: 50%;
+        border-radius: 8px;
+        font-family: "Poppins", sans-serif;
+        display: none;
+        text-align: center;
+      }
+      .popup button {
+        display: block;
+        margin: 0 0 20px auto;
+        background-color: transparent;
+        font-size: 30px;
+        color: #ffffff;
+        background: #03549a;
+        border-radius: 100%;
+        width: 40px;
+        height: 40px;
+        border: none;
+        outline: none;
+        cursor: pointer;
+      }
+      .popup h2 {
+        margin-top: -20px;
+      }
+      .button {
+        display: block;
+        width: 150px;
+        position: relative;
+        margin: 10px auto;
+        text-align: center;
+        background-color: #0f72e5;
+        border-radius: 20px;
+        color: #ffffff;
+        text-decoration: none;
+        padding: 8px 0;
+      }
+    </style>
+    <!--popup code end-->
+
+    <link rel="stylesheet" type="text/css" href="./style.css" />
+    <script type="module" src="./index.ts"></script>
+  </head>
+  <body>
+    <div id="mySidenav" class="sidenav">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
+        >&times;</a
+      >
+
+      <div class="post-module" id="destination-info">
+        <!-- Thumbnail-->
+        <div class="thumbnail">
+          <div class="date">
+            <div class="day" id="booking-count">250</div>
+            <div class="month">Bookings</div>
+          </div>
+          <img id="image-url" src="hotel.jpeg" />
+        </div>
+        <!-- Post Content-->
+        <div class="post-content">
+          <div
+            class="category"
+            onclick="window.open('https://www.expedia.com/New-York-Hotels-Selina-Chelsea.h4339531.Hotel-Information?chkin=2022-06-05&chkout=2022-06-06&x_pwa=1&rfrr=HSR&pwa_ts=1653204409551&referrerUrl=aHR0cHM6Ly93d3cuZXhwZWRpYS5jb20vSG90ZWwtU2VhcmNo&useRewards=false&rm1=a2&regionId=178293&destination=New+York+%28and+vicinity%29%2C+New+York%2C+United+States+of+America&destType=MARKET&neighborhoodId=6142489&selected=4339531&sort=RECOMMENDED&top_dp=194&top_cur=USD&semdtl=&userIntent=&selectedRoomType=315878633&selectedRatePlan=384908491', '_blank');"
+          >
+            Check Hotel
+          </div>
+          <h1 class="title" id="destination-title">City Lights in New York</h1>
+          <h2 class="sub_title" id="destination-sub-title">
+            The city that never sleeps.
+          </h2>
+          <p
+            class="description"
+            id="destination-description"
+            style="height: 55px; opacity: 1;"
+          >
+            New York, the largest city in the U.S., is an architectural marvel
+            with plenty of historic monuments, magnificent buildings and
+            countless dazzling skyscrapers.
+          </p>
+          <div class="post-meta">
+            <span class="timestamp"><i class="fa fa-clock-">o</i></span>
+          </div>
+        </div>
+      </div>
+      <div style="padding-left: 25px; padding-top: 35px;">
+        <h1>Top 10 Destinations</h1>
+        <table class="rwd-table" id="top-destination"></table>
+      </div>
+    </div>
+
+    <div id="map"></div>
+
+    <!-- Trigger the modal with a button -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+      <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+              &times;
+            </button>
+            <h4 class="modal-title">Apply Filter</h4>
+          </div>
+          <div class="modal-body">
+              <p>
+                  <form action="" id="input4radio">
+                      <p><b>Please select a country:</b></p>
+                  </form>
+                </p>
+            <p>
+              <label for="bookingRange">Bookings range:</label>
+              <input
+                type="text"
+                id="bookingRange"
+                readonly
+                style="border: 0; color: #f6931f; font-weight: bold;"
+              />
+              <input type="hidden" id="bookingRangeMin" />
+              <input type="hidden" id="bookingRangeMax" />
+            </p>
+
+            <div id="slider-range"></div>
+            <br />
+            <label for="reportrange">Date range:</label>
+
+            <div
+              id="reportrange"
+              style="
+                background: #fff;
+                cursor: pointer;
+                padding: 5px 10px;
+                border: 1px solid #ccc;
+                width: 100%;
+              "
+            >
+              <i class="fa fa-calendar"></i>&nbsp; <span></span>
+              <i class="fa fa-caret-down"></i>
+              <input type="hidden" id="reportrangeStartDate" />
+              <input type="hidden" id="reportrangeStartMonth" />
+              <input type="hidden" id="reportrangeStartYear" />
+              <input type="hidden" id="reportrangeEndDate" />
+              <input type="hidden" id="reportrangeEndMonth" />
+              <input type="hidden" id="reportrangeEndYear" />
+            </div>
+
+            <a class="button" id="Submit" href="#">Submit</a>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Script -->
+    <script type="text/javascript">
+      $(function () {
+        var start = moment().subtract(2, "years");
+        var end = moment().add(2, "years");
+
+        function cb(start, end) {
+          $("#reportrange span").html(
+            start.format("MMMM D, YYYY") + " - " + end.format("MMMM D, YYYY")
+          );
+          $("#reportrangeStartDate").val(start.format("D"));
+          $("#reportrangeStartMonth").val(start.format("M"));
+          $("#reportrangeStartYear").val(start.format("YYYY"));
+          $("#reportrangeEndDate").val(end.format("D"));
+          $("#reportrangeEndMonth").val(end.format("M"));
+          $("#reportrangeEndYear").val(end.format("YYYY"));
+        }
+
+        $("#reportrange").daterangepicker(
+          {
+            startDate: start,
+            endDate: end,
+            ranges: {
+              Today: [moment(), moment()],
+              Yesterday: [
+                moment().subtract(1, "days"),
+                moment().subtract(1, "days")
+              ],
+              "Last 7 Days": [moment().subtract(6, "days"), moment()],
+              "Last 30 Days": [moment().subtract(29, "days"), moment()],
+              "This Month": [
+                moment().startOf("month"),
+                moment().endOf("month")
+              ],
+              "Last Month": [
+                moment().subtract(1, "month").startOf("month"),
+                moment().subtract(1, "month").endOf("month")
+              ]
+            }
+          },
+          cb
+        );
+
+        cb(start, end);
+      });
+    </script>
+
+    <!-- 
+     The `defer` attribute causes the callback to execute after the full HTML
+     document has been parsed. For non-blocking uses, avoiding race conditions,
+     and consistent behavior across browsers, consider loading using Promises
+     with https://www.npmjs.com/package/@googlemaps/js-api-loader.
+    -->
+    <script>
+      function closeNav() {
+        var x = document.getElementById("mySidenav");
+        x.style.width = "0px";
+      }
+    </script>
+
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&v=weekly"
+      defer
+    ></script>
+  </body>
+</html>
